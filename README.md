@@ -1,2 +1,2 @@
-# pokemos
+# pokemons
 prueba de angular
