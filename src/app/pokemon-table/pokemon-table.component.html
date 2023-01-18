@@ -1,0 +1,71 @@
+<mat-progress-spinner
+    *ngIf="loading"
+    class="example-margin"
+    [color]="color"
+    [mode]="mode"
+    [value]="value">
+</mat-progress-spinner>
+
+<div *ngIf="!loading">
+  <form>
+    <h2 style="text-align: center;">Listado de Pokemones</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Filtro</mat-label>
+      <input
+        type="text"
+        placeholder="Escriba y Seleccione uno"
+        aria-label="Filtro"
+        [formControl]="filter"
+        [matAutocomplete]="auto"
+        matInput
+      />
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayName">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{ option.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+      <!-- name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+      </ng-container>
+
+      <!-- url Column -->
+      <ng-container matColumnDef="url">
+        <th mat-header-cell *matHeaderCellDef>Url</th>
+        <td mat-cell *matCellDef="let row">{{ row.url }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        (click)="showPokemonDetail(row)"
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          No hay data para mostrar
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      #paginator
+      [pageSizeOptions]="[5, 10, 20, 50, 100]"
+      aria-label="Selecciona página de pokemones"
+      [showFirstLastButtons]="'true'"
+      [length]="totalElements"
+      [pageIndex]="page"
+      [pageSize]="pageSize"
+      (page)="getPokemonsByPagination($event)"
+    ></mat-paginator>
+  </div>
+</div>
+

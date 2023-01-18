@@ -1,0 +1,45 @@
+.div-f {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap-reverse;
+    justify-content: space-evenly;
+}
+
+.div-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.m-tb-2-0 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+
+table {
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td,
+th {
+  width: 25%;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+border-bottom: 1px solid transparent;
+border-top: 1px solid transparent;
+cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+border-color: currentColor;
+}
