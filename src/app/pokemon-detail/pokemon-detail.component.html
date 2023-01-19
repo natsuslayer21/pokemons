@@ -8,10 +8,30 @@
       <img mat-card-xl-image style="padding-top: 2rem;" [src]="getImage(pokemonDetail)">
     </mat-card-title-group>
   </mat-card-header>
-  <mat-card-content *ngIf="verifyPokemon()">
-    <p>Altura: {{ pokemonDetail.height }}</p>
-    <p>Peso: {{ pokemonDetail.weight }}</p>
-    <p>Orden: {{ pokemonDetail.order }}</p>
+  <mat-card-content *ngIf="verifyPokemon()" class="content-style">
+    <div>
+      <p>
+        <label class="fs-18">Altura: </label> <label>{{ pokemonDetail.height }}</label>
+      </p>
+      <p>
+        <label class="fs-18">Peso: </label> <label>{{ pokemonDetail.weight }}</label>
+      </p>
+      <p>
+        <label class="fs-18">Orden: </label> <label>{{ pokemonDetail.order }}</label>
+      </p>
+    </div>
+    <div>
+      <p class="fs-18">Habilidades:</p>
+      <li *ngFor="let ability of pokemonDetail.abilities">
+        {{ ability.ability.name }}
+      </li>
+    </div>
+    <div>
+      <p class="fs-18">Tipos:</p>
+      <li *ngFor="let type of pokemonDetail.types">
+        {{ type.type.name }}
+      </li>
+    </div>
   </mat-card-content>
 
   <mat-card-content *ngIf="!verifyPokemon()">

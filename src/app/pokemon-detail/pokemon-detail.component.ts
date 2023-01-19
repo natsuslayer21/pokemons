@@ -6,6 +6,8 @@ import { MatCardModule } from '@angular/material/card';
 import { PokemonService } from '../pokemon.service';
 import { Subscription } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-pokemon-detail',
@@ -13,7 +15,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   imports: [
     CommonModule,
     MatCardModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDividerModule,
+    MatListModule
   ],
   templateUrl: './pokemon-detail.component.html',
   styleUrls: ['./pokemon-detail.component.css']
