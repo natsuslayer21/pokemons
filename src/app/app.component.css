@@ -8,6 +8,8 @@
 .div-main {
   display: flex;
   flex-direction: column;
+
+  background: linear-gradient(#44d3ab, #9198e5);
 }
 
 .m-auto {
@@ -41,5 +43,9 @@ cursor: pointer;
 }
 
 .mat-mdc-row:hover .mat-mdc-cell {
-border-color: currentColor;
+  border-color: currentColor;
+}
+
+.pb-3 {
+  padding-bottom: 3rem;
 }

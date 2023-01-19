@@ -7,11 +7,13 @@
         type="text"
         placeholder="Escriba y Seleccione uno"
         aria-label="Filtro"
-        [formControl]="filter"
+        [(ngModel)]="filter"
+        name="filter"
         [matAutocomplete]="auto"
+        (ngModelChange)="applyFilter()"
         matInput
       />
-      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayName">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="selectPokemonAutocomplete()">
         <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
           {{ option.name }}
         </mat-option>

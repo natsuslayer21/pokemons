@@ -7,9 +7,9 @@ import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/mat
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Pokemon } from '../pokemon';
 import { PokemonService } from '../pokemon.service';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 import { MyCustomPaginatorIntl } from '../mat-custom-paginator-intl';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -25,7 +25,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatAutocompleteModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    FormsModule
   ],
   providers: [{provide: MatPaginatorIntl, useClass: MyCustomPaginatorIntl}],
   templateUrl: './pokemon-table.component.html',
@@ -36,7 +37,7 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['name', 'url'];
   dataSource!: MatTableDataSource<Pokemon>;
 
-  filter = new FormControl();
+  filter: string | Pokemon = '';
   options: Pokemon[] = [];
   filteredOptions!: Observable<Pokemon[]>;
 
@@ -72,35 +73,32 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.filteredOptions = this.filter.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
-
-    this.filter.valueChanges.subscribe(
-      response => {
-        if (response === "") {
-          this.getPokemonsByPagination({
-            pageIndex: 0,
-            pageSize: 10
-          });
-
-          this.showPokemonDetail({} as Pokemon);
-        }
-      }
-    );
-
     this.getAllPokemonsPaginated(this.query);
   }
 
-  private _filter(value: any): any {
-    if (value.length || value === "") {
-      const filterValue = value.toLowerCase();
-      return this.options.filter(option => option.name.toLowerCase().includes(filterValue));
-    } else if(Object.keys(value)) {
-      this.findPokemon(value);
-      return [];
+  applyFilter() {
+    if (typeof this.filter === 'string' && this.filter.length) {
+      this.filteredOptions = of(this.options).pipe(
+        map(value => this._filter(value))
+      );
+    } else if(typeof this.filter === 'string' && this.filter.length === 0){
+      this.getPokemonsByPagination({
+        pageIndex: 0,
+        pageSize: 10
+      });
+
+      this.filteredOptions = of([]);
     }
+  }
+
+  private _filter(pokemons: Pokemon[]): any {
+    if(typeof this.filter === 'string' && this.filter.length)
+      return pokemons.filter(pokemon => pokemon.name.toLowerCase().startsWith(this.filter as string));
+    return [];
+  }
+
+  selectPokemonAutocomplete() {
+    this.findPokemon(this.filter as Pokemon);
   }
 
   displayName(data: any) {
@@ -148,14 +146,15 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
   }
 
   findPokemon(pokemon: Pokemon) {
-    this.page = 0;
-    this.pageSize = 10;
+    this.loading = true;
+    this.dataSource.paginator?.firstPage();
     this.pokemonsPaginatedAux = this.pokemonsPaginated;
 
     this.pokemonService.getByName(pokemon.url).subscribe(response => {
       this.pokemonsPaginated = [pokemon];
       this.totalElements = 1;
       this.dataSource = new MatTableDataSource(this.pokemonsPaginated);
+      this.loading = false;
     });
   }
 

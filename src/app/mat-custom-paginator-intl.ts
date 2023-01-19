@@ -18,6 +18,6 @@ export class MyCustomPaginatorIntl implements MatPaginatorIntl {
       return `Página 1 de 1`;
     }
     const amountPages = Math.ceil(length / pageSize);
-    return `Página ${page + 1} de ${amountPages}`;
+    return `Página ${page + 1} - ${amountPages} de ${length}`;
   }
 }
