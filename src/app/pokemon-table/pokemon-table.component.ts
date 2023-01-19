@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ThemePalette } from '@angular/material/core';
 import { MatProgressSpinnerModule, ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MyCustomPaginatorIntl } from '../mat-custom-paginator-intl';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-pokemon-table',
@@ -26,7 +27,8 @@ import { MyCustomPaginatorIntl } from '../mat-custom-paginator-intl';
     MatAutocompleteModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ],
   providers: [{provide: MatPaginatorIntl, useClass: MyCustomPaginatorIntl}],
   templateUrl: './pokemon-table.component.html',
@@ -54,7 +56,6 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
 
   totalPokemons: number;
   pokemonSelected: Pokemon | undefined;
-  @Output() showPokemon = new EventEmitter<any>();
   @Output() showTableAlphabet = new EventEmitter<any>();
 
   @ViewChild(MatPaginator)
@@ -66,10 +67,10 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
 
     this.dataSource = new MatTableDataSource(this.pokemonsPaginated);
     this.totalElements = 0;
-    this.page = 1;
-    this.pageSize = 20;
+    this.page = 0;
+    this.pageSize = 10;
     this.totalPokemons = 0;
-    this.loading = true;
+    this.loading = false;
   }
 
   ngAfterViewInit() {
@@ -87,10 +88,10 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
         if (response === "") {
           this.getPokemonsByPagination({
             pageIndex: 0,
-            pageSize: 20
+            pageSize: 10
           });
 
-          this.showPokemonDetail(undefined);
+          this.showPokemonDetail({} as Pokemon);
         }
       }
     );
@@ -119,8 +120,8 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
         if (response.results) {
           this.pokemonsPaginated = response.results;
           this.totalElements = response.count;
-          this.page = query ? query.page : 1;
-          this.pageSize = query ? query.limit : 20
+          this.page = query ? query.page : 0;
+          this.pageSize = query ? query.limit : 10;
           this.dataSource = new MatTableDataSource(this.pokemonsPaginated);
 
           this.loading = false;
@@ -146,7 +147,7 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
   getPokemonsByPagination(event: any) {
     this.query = {
       page: event.pageIndex,
-      offset: event.pageIndex !== 0 ? ((event.pageIndex - 1) * event.pageSize) : event.pageIndex,
+      offset: (event.pageIndex * event.pageSize),
       limit: event.pageSize
     };
     this.getAllPokemonsPaginated(this.query);
@@ -154,7 +155,7 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
 
   findPokemon(pokemon: Pokemon) {
     this.page = 0;
-    this.pageSize = 20;
+    this.pageSize = 10;
     this.pokemonsPaginatedAux = this.pokemonsPaginated;
 
     this.pokemonService.getByName(pokemon.url).subscribe(response => {
@@ -164,8 +165,8 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
     });
   }
 
-  showPokemonDetail(row: Pokemon | undefined) {
+  showPokemonDetail(row: Pokemon) {
     this.pokemonSelected = row;
-    this.showPokemon.emit(this.pokemonSelected);
+    this.pokemonService.savePokemon(row);
   }
 }

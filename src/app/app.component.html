@@ -1,8 +1,8 @@
 <div class="div-main">
   <div class="div-f">
-      <app-pokemon-table (showPokemon)="showPokemon($event)" (showTableAlphabet)="showTableAlphabet($event)" class="m-tb-2-0"></app-pokemon-table>
+      <app-pokemon-table (showTableAlphabet)="showTableAlphabet($event)" class="m-tb-2-0"></app-pokemon-table>
 
-      <app-pokemon-detail *ngIf="pokemonDetail" [pokemon]="pokemonDetail" class="m-tb-2-0"></app-pokemon-detail>
+      <app-pokemon-detail class="m-tb-2-0"></app-pokemon-detail>
   </div>
 
   <div class="m-auto">

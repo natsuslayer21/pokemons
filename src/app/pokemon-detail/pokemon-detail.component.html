@@ -1,22 +1,32 @@
-<mat-progress-spinner
+<!-- <mat-progress-spinner
     *ngIf="loading"
     class="example-margin"
     [color]="color"
     [mode]="mode"
     [value]="value">
-</mat-progress-spinner>
+</mat-progress-spinner> -->
 
-<mat-card *ngIf="!loading">
-  <mat-card-header>
+<h2 style="text-align: center;">Detalles del pokemon</h2>
+
+<mat-card>
+  <mat-card-header *ngIf="verifyPokemon()">
     <mat-card-title-group>
       <mat-card-title>{{ pokemonDetail.name | titlecase }}</mat-card-title>
       <mat-card-subtitle>Experiencia base: {{ pokemonDetail.base_experience }}</mat-card-subtitle>
       <img mat-card-xl-image style="padding-top: 2rem;" [src]="getImage(pokemonDetail)">
     </mat-card-title-group>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content *ngIf="verifyPokemon()">
     <p>Altura: {{ pokemonDetail.height }}</p>
     <p>Peso: {{ pokemonDetail.weight }}</p>
     <p>Orden: {{ pokemonDetail.order }}</p>
   </mat-card-content>
+
+  <mat-card-content *ngIf="!verifyPokemon()">
+    <p>Debe seleccionar un pokemon</p>
+  </mat-card-content>
+
+  <mat-card-footer *ngIf="loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </mat-card-footer>
 </mat-card>
