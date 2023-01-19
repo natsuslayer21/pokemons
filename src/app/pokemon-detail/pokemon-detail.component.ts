@@ -2,10 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Pokemon } from '../pokemon';
 
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { PokemonService } from '../pokemon.service';
-import { MatProgressSpinnerModule, ProgressSpinnerMode } from '@angular/material/progress-spinner';
-import { ThemePalette } from '@angular/material/core';
 import { Subscription } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
@@ -15,7 +13,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   imports: [
     CommonModule,
     MatCardModule,
-    MatProgressSpinnerModule,
     MatProgressBarModule
   ],
   templateUrl: './pokemon-detail.component.html',
@@ -27,24 +24,10 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
 
   pokemonDetail: any;
 
-  color: ThemePalette = 'primary';
-  mode: ProgressSpinnerMode = 'indeterminate';
-  value = 100;
-
   loading: boolean = false;
   private pokemonServiceSubscription: Subscription | undefined;
 
   constructor(private pokemonService: PokemonService) {}
-
-  ngOnChanges(): void {
-    // this.loading = true;
-    // this.pokemonService.getByName(this.pokemon.url).subscribe(
-    //   response => {
-    //     this.pokemonDetail = response;
-    //     this.loading = false;
-    //   }
-    // );
-  }
 
   ngOnInit(): void {
     this.pokemonServiceSubscription = this.pokemonService.pokemon$.subscribe(

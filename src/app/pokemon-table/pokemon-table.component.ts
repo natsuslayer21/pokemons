@@ -11,8 +11,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
-import { ThemePalette } from '@angular/material/core';
-import { MatProgressSpinnerModule, ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MyCustomPaginatorIntl } from '../mat-custom-paginator-intl';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
@@ -27,7 +25,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatAutocompleteModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatProgressSpinnerModule,
     MatProgressBarModule
   ],
   providers: [{provide: MatPaginatorIntl, useClass: MyCustomPaginatorIntl}],
@@ -50,9 +47,6 @@ export class PokemonTableComponent implements OnInit, AfterViewInit {
   pageSize: number;
   query: any;
   loading: boolean;
-  color: ThemePalette = 'primary';
-  mode: ProgressSpinnerMode = 'indeterminate';
-  value = 100;
 
   totalPokemons: number;
   pokemonSelected: Pokemon | undefined;
